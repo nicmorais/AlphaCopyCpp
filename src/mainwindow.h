@@ -49,5 +49,7 @@ class MainWindow : public QMainWindow
         void setCopyProgressBar(int value);
 
         void setCopyProgressBarStylesheet();
+
+        void returnToHome();
 };
 #endif // MAINWINDOW_H

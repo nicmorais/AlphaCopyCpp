@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>AlphaCopy</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../assets/resources.qrc">
+    <normaloff>:/icons/logos/alphaletter.png</normaloff>:/icons/logos/alphaletter.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(46, 48, 59);
 color:rgb(220, 220, 220);
@@ -47,7 +51,7 @@ border-radius: 10px;</string>
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="initPage">
        <widget class="QLabel" name="appTitle">
@@ -77,10 +81,10 @@ border-radius: 10px;</string>
        <widget class="QLabel" name="logoLabel">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>184</x>
           <y>100</y>
-          <width>141</width>
-          <height>81</height>
+          <width>91</width>
+          <height>80</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -88,9 +92,6 @@ border-radius: 10px;</string>
         </property>
         <property name="text">
          <string/>
-        </property>
-        <property name="pixmap">
-         <pixmap resource="resources.qrc">:/icons/assets/logos/alphaletter.png</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -416,9 +417,6 @@ QPushButton::pressed {
         <property name="text">
          <string/>
         </property>
-        <property name="pixmap">
-         <pixmap resource="resources.qrc">:/icons/assets/devices/Sycamoreent-Storage-Sd.png</pixmap>
-        </property>
         <property name="scaledContents">
          <bool>true</bool>
         </property>
@@ -438,14 +436,40 @@ QPushButton::pressed {
         <property name="text">
          <string/>
         </property>
-        <property name="pixmap">
-         <pixmap resource="resources.qrc">:/icons/assets/devices/usb-black.png</pixmap>
-        </property>
         <property name="scaledContents">
          <bool>true</bool>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="returnToHomePB">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 0, 255), stop:0.0138249 rgba(0, 0, 0, 255), stop:0.0184332 rgba(143, 66, 231, 255), stop:0.976959 rgba(14, 218, 195, 255), stop:1 rgba(255, 255, 255, 255));
+	color: rgb(200, 200, 200);
+	border-style: none;
+	border-radius: 30px;
+	text-align: center;
+}
+QPushButton::pressed {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(222, 151, 255, 255), stop:1 rgba(54, 237, 216, 255));
+	color: rgb(200, 200, 200);
+	border-style: none;
+	border-radius: 30px;
+	text-align: center;
+}</string>
+        </property>
+        <property name="text">
+         <string>Return</string>
         </property>
        </widget>
       </widget>
@@ -826,7 +850,7 @@ QProgressBar::chunk{
   </widget>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../assets/resources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -957,6 +981,22 @@ QProgressBar::chunk{
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>returnToHomePB</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>returnToHome()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>89</x>
+     <y>327</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>scan()</slot>
@@ -965,5 +1005,6 @@ QProgressBar::chunk{
   <slot>eject()</slot>
   <slot>abortCopy()</slot>
   <slot>setCopyProgressBarStylesheet()</slot>
+  <slot>returnToHome()</slot>
  </slots>
 </ui>

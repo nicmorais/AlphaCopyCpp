@@ -14,6 +14,7 @@ class CopyCheckThread : public QThread
         CopyCheckSignals* signal;
 
         QString dest;
+        int srcSize;
 
         void run();
 

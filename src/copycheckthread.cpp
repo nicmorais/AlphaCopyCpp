@@ -12,9 +12,11 @@ CopyCheckThread::CopyCheckThread() : QThread()
 
 void CopyCheckThread::run()
 {
-  while(isRunning){
-    int size = getFolderDiskUsage(dest.toStdString());
+  int size = 0;
+  while(isRunning && size < srcSize){
+    size = getFolderDiskUsage(dest.toStdString());
     Q_EMIT signal->dataCopied(size);
+    QThread::sleep(1);
   }
 }
 
@@ -32,7 +34,8 @@ int CopyCheckThread::getFolderDiskUsage(std::string path)
     char readbuf[max_size];
 
     if (fgets(readbuf, max_size, stream) != NULL) {
-      return atoll(readbuf) / pow(2, 20);
+      int size =  atoll(readbuf) / pow(2, 10);
+      return size;
     }
 
     pclose(stream);

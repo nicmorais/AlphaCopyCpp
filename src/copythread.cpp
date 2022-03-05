@@ -8,13 +8,14 @@ namespace fs = std::filesystem;
 
 CopyThread::CopyThread() : QThread()
 {
-  signal = new CopySignals;
-  isRunning = true;
+    signal = new CopySignals;
+    isRunning = true;
 }
 
 void CopyThread::run()
 {
     copy(src, dest);
+    Q_EMIT signal->copyFinished();
 }
 
 // By ssendeavour - https://gist.github.com/ssendeavour/7324701
@@ -36,16 +37,17 @@ bool CopyThread::copy(QString srcFilePath, QString tgtFilePath)
         QStringList fileNames = sourceDir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
 
         foreach (const QString& fileName, fileNames) {
-
             const QString newSrcFilePath
                 = srcFilePath + QLatin1Char('/') + fileName;
             const QString newTgtFilePath
                 = tgtFilePath + QLatin1Char('/') + fileName;
+
             if (!isRunning) {
-              Q_EMIT signal->copyInterrupted();
-              return false;
-            }else{
-              fs::copy(newSrcFilePath.toStdString(), newTgtFilePath.toStdString());
+                Q_EMIT signal->copyInterrupted();
+                return false;
+            } else {
+                //fs::copy(newSrcFilePath.toStdString(), newTgtFilePath.toStdString());
+                copy(newSrcFilePath, newTgtFilePath);
             }
         }
     } else {
@@ -55,6 +57,7 @@ bool CopyThread::copy(QString srcFilePath, QString tgtFilePath)
     return true;
 }
 
-void CopyThread::quit(){
-  isRunning = false;
+void CopyThread::quit()
+{
+    isRunning = false;
 }

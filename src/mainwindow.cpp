@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "ui_mainwidget.h"
+#include "ui_mainwindow.h"
 #include <QDebug>
 #include <QDirIterator>
 #include <filesystem>
@@ -9,15 +9,16 @@
 #include <QStorageInfo>
 #include <QThreadPool>
 #include "copychecksignals.h"
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
-    QPixmap sdPixmap = QPixmap(":/icons/assets/devices/Sycamoreent-Storage-Sd.png");
-    QPixmap hddPixmap = QPixmap(":/icons/assets/devices/usb-black.png");
-    QPixmap logoLabel = QPixmap(":/icons/assets/logos/alphaletter.png");
+    QPixmap sdPixmap = QPixmap(":/icons/devices/Sycamoreent-Storage-Sd.png");
+    QPixmap hddPixmap = QPixmap(":/icons/devices/usb-black.png");
+    QPixmap logoLabel = QPixmap(":/icons/logos/alphaletter.png");
     ui->sdIconLb->setPixmap(sdPixmap.scaledToHeight(64));
     ui->hddIconLb->setPixmap(hddPixmap.scaledToHeight(64));
     ui->logoLabel->setPixmap(logoLabel.scaledToHeight(64));
@@ -43,7 +44,7 @@ int MainWindow::getFolderDiskUsage(std::string path)
         char readbuf[max_size];
 
         if (fgets(readbuf, max_size, stream) != NULL) {
-            return atoll(readbuf) / pow(2, 20);
+            return atoll(readbuf) / pow(2, 10);
         }
 
         pclose(stream);
@@ -57,7 +58,7 @@ float MainWindow::getDiskSize(QString path)
 {
     QStorageInfo storage;
     storage.setPath(path);
-    return storage.bytesTotal() / pow(2, 20);
+    return storage.bytesTotal() / pow(2, 10);
 }
 
 void MainWindow::scan()
@@ -78,13 +79,12 @@ void MainWindow::scan()
     for (const auto& disk : disks) {
         float size = getDiskSize(QString::fromStdString(disk));
 
-        if (size < 65000) {
+        if (size < 65000000) {
             sdCardPath = QString::fromStdString(disk);
         } else {
             hddPath = QString::fromStdString(disk);
         }
     }
-
     ui->sdLE->setText(sdCardPath);
     ui->hddLE->setText(hddPath);
     ui->stackedWidget->setCurrentIndex(2);
@@ -98,26 +98,35 @@ void MainWindow::setCopyProgressBar(int value)
 void MainWindow::copy()
 {
     ui->stackedWidget->setCurrentIndex(3);
-    ui->copyProgrB->setMaximum(getFolderDiskUsage("/media/nicolas/SD32"));
+    ui->copyProgrB->setMaximum(getFolderDiskUsage(ui->sdLE->text().toStdString()));
     copyThread = new CopyThread;
     copyThread->src = ui->sdLE->text();
-    copyThread->dest = ui->hddLE->text() + "/test3";
+    QString dateString = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss");
+    QString dest = ui->hddLE->text() + "/" + dateString;
+    QDir qDir;
+    qDir.mkdir(dest);
+    copyThread->dest = dest;
+
     copyCheck = new CopyCheckThread;
-    copyCheck->dest = ui->hddLE->text() + "/test3";
+    copyCheck->dest = dest;
+    copyCheck->srcSize = getFolderDiskUsage(ui->sdLE->text().toStdString());
     connect(copyThread->signal, &CopySignals::copyInterrupted, this, &MainWindow::done);
     connect(copyCheck->signal, &CopyCheckSignals::dataCopied, this, &MainWindow::setCopyProgressBar);
-
+    connect(copyThread->signal, &CopySignals::copyFinished, this, [this](){ui->stackedWidget->setCurrentIndex(4);});
     copyThread->start();
     copyCheck->start();
 }
 
 void MainWindow::eject()
 {
+    std::string command = "umount " + sdCardPath.toStdString();
+    system(command.c_str());
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 void MainWindow::done()
 {
-  ui->stackedWidget->setCurrentIndex(0);
+  ui->stackedWidget->setCurrentIndex(6);
 }
 
 void MainWindow::abortCopy()
@@ -145,4 +154,8 @@ void MainWindow::setCopyProgressBarStylesheet()
                                   "stop:0.0184332 rgba(143, 66, 231, 255), "
                                   "stop:0.976959 rgba(14, 218, 195, 255), "
                                   "stop:1 rgba(255, 255, 255, 255)); }");
+}
+
+void MainWindow::returnToHome(){
+    ui->stackedWidget->setCurrentIndex(0);
 }

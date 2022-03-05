@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>assets/devices/usb-black.png</file>
-        <file>assets/devices/Sycamoreent-Storage-Sd.png</file>
-        <file>assets/logos/alphaletter.png</file>
+        <file>devices/usb-black.png</file>
+        <file>devices/Sycamoreent-Storage-Sd.png</file>
+        <file>logos/alphaletter.png</file>
     </qresource>
 </RCC>
