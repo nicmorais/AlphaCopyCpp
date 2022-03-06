@@ -54,7 +54,6 @@ bool CopyThread::copy(QString srcFilePath, QString tgtFilePath)
             Q_EMIT signal->copyError(e);
             return false;
         }
-        QThread::sleep(2);
     }
 
     return true;
