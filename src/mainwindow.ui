@@ -136,6 +136,7 @@ border-radius: 10px;</string>
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -209,6 +210,7 @@ QPushButton::pressed {
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -249,11 +251,13 @@ QPushButton::pressed {
         </property>
         <property name="font">
          <font>
-          <pointsize>11</pointsize>
+          <pointsize>14</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(237, 51, 59);</string>
+         <string notr="true">color: rgb(255, 62, 76);</string>
         </property>
         <property name="text">
          <string/>
@@ -362,6 +366,7 @@ QPushButton::pressed {
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -473,6 +478,7 @@ QPushButton::pressed {
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -493,7 +499,7 @@ QPushButton::pressed {
 }</string>
         </property>
         <property name="text">
-         <string>&lt; Return  </string>
+         <string>&lt; Back  </string>
         </property>
        </widget>
       </widget>
@@ -572,6 +578,7 @@ QProgressBar::chunk{
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -636,6 +643,7 @@ QPushButton::pressed {
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -676,6 +684,7 @@ QPushButton::pressed {
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -742,6 +751,7 @@ QPushButton::pressed {
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -782,6 +792,7 @@ QPushButton::pressed {
         <property name="font">
          <font>
           <pointsize>18</pointsize>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
