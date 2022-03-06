@@ -51,5 +51,7 @@ class MainWindow : public QMainWindow
         void setCopyProgressBarStylesheet();
 
         void returnToHome();
+
+        void copyError(std::filesystem::filesystem_error error);
 };
 #endif // MAINWINDOW_H

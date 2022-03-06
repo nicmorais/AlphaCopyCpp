@@ -101,18 +101,19 @@ void MainWindow::copy()
     ui->copyProgrB->setMaximum(getFolderDiskUsage(ui->sdLE->text().toStdString()));
     copyThread = new CopyThread;
     copyThread->src = ui->sdLE->text();
-    QString dateString = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss");
-    QString dest = ui->hddLE->text() + "/" + dateString;
-    QDir qDir;
-    qDir.mkdir(dest);
-    copyThread->dest = dest;
 
+    QString dateString = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss");
+    QString destPath = ui->hddLE->text() + "/" + dateString;
+
+    copyThread->dest = destPath;
     copyCheck = new CopyCheckThread;
-    copyCheck->dest = dest;
+    copyCheck->dest = destPath;
     copyCheck->srcSize = getFolderDiskUsage(ui->sdLE->text().toStdString());
+
     connect(copyThread->signal, &CopySignals::copyInterrupted, this, &MainWindow::done);
     connect(copyCheck->signal, &CopyCheckSignals::dataCopied, this, &MainWindow::setCopyProgressBar);
     connect(copyThread->signal, &CopySignals::copyFinished, this, [this](){ui->stackedWidget->setCurrentIndex(4);});
+
     copyThread->start();
     copyCheck->start();
 }
@@ -158,4 +159,9 @@ void MainWindow::setCopyProgressBarStylesheet()
 
 void MainWindow::returnToHome(){
     ui->stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::copyError(std::filesystem::filesystem_error error){
+    ui->stackedWidget->setCurrentIndex(5);
+    ui->errorsFoundLb->setText(error.what());
 }

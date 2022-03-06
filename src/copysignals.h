@@ -2,6 +2,7 @@
 #define COPYSIGNALS_H
 
 #include <QObject>
+#include <filesystem>
 
 class CopySignals : public QObject
 {
@@ -14,6 +15,7 @@ class CopySignals : public QObject
 
         void copyInterrupted();
 
+        void copyError(std::filesystem::filesystem_error);
 };
 
 #endif // COPYSIGNALS_H

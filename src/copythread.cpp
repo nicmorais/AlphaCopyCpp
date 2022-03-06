@@ -37,21 +37,24 @@ bool CopyThread::copy(QString srcFilePath, QString tgtFilePath)
         QStringList fileNames = sourceDir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
 
         foreach (const QString& fileName, fileNames) {
-            const QString newSrcFilePath
-                = srcFilePath + QLatin1Char('/') + fileName;
-            const QString newTgtFilePath
-                = tgtFilePath + QLatin1Char('/') + fileName;
+            const QString newSrcFilePath = srcFilePath + QLatin1Char('/') + fileName;
+            const QString newTgtFilePath = tgtFilePath + QLatin1Char('/') + fileName;
 
             if (!isRunning) {
                 Q_EMIT signal->copyInterrupted();
                 return false;
             } else {
-                //fs::copy(newSrcFilePath.toStdString(), newTgtFilePath.toStdString());
                 copy(newSrcFilePath, newTgtFilePath);
             }
         }
     } else {
-        fs::copy(srcFilePath.toStdString(), tgtFilePath.toStdString(), options);
+        try {
+            fs::copy(srcFilePath.toStdString(), tgtFilePath.toStdString());
+        } catch (fs::filesystem_error e) {
+            Q_EMIT signal->copyError(e);
+            return false;
+        }
+        QThread::sleep(2);
     }
 
     return true;
