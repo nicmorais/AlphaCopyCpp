@@ -10,6 +10,7 @@
 #include <QThreadPool>
 #include "copychecksignals.h"
 #include <QDateTime>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->hddIconLb->setPixmap(hddPixmap.scaledToHeight(64));
     ui->logoLabel->setPixmap(logoLabel.scaledToHeight(64));
     connect(ui->copyProgrB, &QProgressBar::valueChanged, this, &MainWindow::setCopyProgressBarStylesheet);
+    addAction(ui->actionExit);
 }
 
 MainWindow::~MainWindow()
@@ -85,6 +87,7 @@ void MainWindow::scan()
             hddPath = QString::fromStdString(disk);
         }
     }
+
     ui->sdLE->setText(sdCardPath);
     ui->hddLE->setText(hddPath);
     ui->stackedWidget->setCurrentIndex(2);
@@ -101,19 +104,17 @@ void MainWindow::copy()
     ui->copyProgrB->setMaximum(getFolderDiskUsage(ui->sdLE->text().toStdString()));
     copyThread = new CopyThread;
     copyThread->src = ui->sdLE->text();
-
     QString dateString = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss");
     QString destPath = ui->hddLE->text() + "/" + dateString;
-
     copyThread->dest = destPath;
     copyCheck = new CopyCheckThread;
     copyCheck->dest = destPath;
     copyCheck->srcSize = getFolderDiskUsage(ui->sdLE->text().toStdString());
-
     connect(copyThread->signal, &CopySignals::copyInterrupted, this, &MainWindow::done);
     connect(copyCheck->signal, &CopyCheckSignals::dataCopied, this, &MainWindow::setCopyProgressBar);
-    connect(copyThread->signal, &CopySignals::copyFinished, this, [this](){ui->stackedWidget->setCurrentIndex(4);});
-
+    connect(copyThread->signal, &CopySignals::copyFinished, this, [this]() {
+        ui->stackedWidget->setCurrentIndex(4);
+    });
     copyThread->start();
     copyCheck->start();
 }
@@ -127,7 +128,7 @@ void MainWindow::eject()
 
 void MainWindow::done()
 {
-  ui->stackedWidget->setCurrentIndex(6);
+    ui->stackedWidget->setCurrentIndex(6);
 }
 
 void MainWindow::abortCopy()
@@ -157,11 +158,40 @@ void MainWindow::setCopyProgressBarStylesheet()
                                   "stop:1 rgba(255, 255, 255, 255)); }");
 }
 
-void MainWindow::returnToHome(){
+void MainWindow::returnToHome()
+{
     ui->stackedWidget->setCurrentIndex(0);
 }
 
-void MainWindow::copyError(std::filesystem::filesystem_error error){
+void MainWindow::copyError(std::filesystem::filesystem_error error)
+{
     ui->stackedWidget->setCurrentIndex(5);
     ui->errorsFoundLb->setText(error.what());
+}
+
+void MainWindow::switchScreenMode()
+{
+    if (windowState() == Qt::WindowFullScreen) {
+        setWindowState(Qt::WindowNoState);
+        ui->switchScreenModePB->setIcon(QIcon(":/icons/icons/fullscreen.png"));
+    } else {
+        setWindowState(Qt::WindowFullScreen);
+        ui->switchScreenModePB->setIcon(QIcon(":/icons/icons/windowed.png"));
+    }
+}
+
+void MainWindow::closePrompt()
+{
+    QMessageBox closeMessage;
+    closeMessage.setWindowTitle(tr("Exit AlphaCopy"));
+    closeMessage.setText(tr("Are you sure?"));
+    closeMessage.addButton(tr("Yes"), QMessageBox::AcceptRole);
+    closeMessage.addButton(tr("No"), QMessageBox::RejectRole);
+
+    closeMessage.setStyleSheet("font-size: 36px; "
+                               "background-color: rgb(46, 48, 59); "
+                               "color:rgb(220, 220, 220);");
+    if(closeMessage.exec() == QMessageBox::AcceptRole){
+      close();
+    }
 }

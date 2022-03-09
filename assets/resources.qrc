@@ -3,5 +3,8 @@
         <file>devices/usb-black.png</file>
         <file>devices/Sycamoreent-Storage-Sd.png</file>
         <file>logos/alphaletter.png</file>
+        <file>icons/fullscreen.png</file>
+        <file>icons/windowed.png</file>
+        <file>icons/exit.png</file>
     </qresource>
 </RCC>

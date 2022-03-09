@@ -29,7 +29,7 @@ class MainWindow : public QMainWindow
 
         float getDiskSize(QString path);
 
-        bool copyRecursively(const QString &srcFilePath, const QString &tgtFilePath);
+        bool copyRecursively(const QString& srcFilePath, const QString& tgtFilePath);
 
         CopyThread* copyThread;
 
@@ -53,5 +53,10 @@ class MainWindow : public QMainWindow
         void returnToHome();
 
         void copyError(std::filesystem::filesystem_error error);
+
+        void closePrompt();
+
+    public Q_SLOTS:
+        void switchScreenMode();
 };
 #endif // MAINWINDOW_H

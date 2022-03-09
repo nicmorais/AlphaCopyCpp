@@ -13,6 +13,7 @@ CopyCheckThread::CopyCheckThread() : QThread()
 void CopyCheckThread::run()
 {
     int size = 0;
+    int lastSize = 0;
 
     while (isRunning && size < srcSize) {
         size = getFolderDiskUsage(dest.toStdString());

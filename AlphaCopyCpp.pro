@@ -26,7 +26,8 @@ HEADERS += \
     src/mainwindow.h
 
 FORMS += \
-    src/mainwindow.ui
+#    src/mainwindow.ui
+    src/mainwindow2test.ui
 
 TRANSLATIONS += \
     AlphaCopyCpp_pt_BR.ts

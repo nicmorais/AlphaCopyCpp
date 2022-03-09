@@ -19,7 +19,7 @@
   <property name="maximumSize">
    <size>
     <width>480</width>
-    <height>280</height>
+    <height>320</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@ border-radius: 10px;</string>
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="initPage">
        <widget class="QLabel" name="appTitle">
@@ -82,9 +82,9 @@ border-radius: 10px;</string>
         <property name="geometry">
          <rect>
           <x>184</x>
-          <y>100</y>
+          <y>109</y>
           <width>91</width>
-          <height>80</height>
+          <height>71</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -163,6 +163,55 @@ QPushButton::pressed {
         </property>
         <property name="autoDefault">
          <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="switchScreenModePB">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>5</x>
+          <y>5</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../assets/resources.qrc">
+          <normaloff>:/icons/icons/fullscreen.png</normaloff>:/icons/icons/fullscreen.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="exitPB">
+        <property name="geometry">
+         <rect>
+          <x>430</x>
+          <y>0</y>
+          <width>51</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../assets/resources.qrc">
+          <normaloff>:/icons/icons/exit.png</normaloff>:/icons/icons/exit.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
         </property>
        </widget>
       </widget>
@@ -929,6 +978,14 @@ QProgressBar::chunk{
     </item>
    </layout>
   </widget>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Esc</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../assets/resources.qrc"/>
@@ -1034,7 +1091,7 @@ QProgressBar::chunk{
    <sender>abortCopyPB</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>abortCopy()</slot>
+   <slot>closePrompt()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>276</x>
@@ -1078,6 +1135,54 @@ QProgressBar::chunk{
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>switchScreenModePB</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>switchScreenMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>31</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>77</x>
+     <y>353</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exitPB</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>464</x>
+     <y>35</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>469</x>
+     <y>327</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>closePrompt()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>scan()</slot>
@@ -1087,5 +1192,7 @@ QProgressBar::chunk{
   <slot>abortCopy()</slot>
   <slot>setCopyProgressBarStylesheet()</slot>
   <slot>returnToHome()</slot>
+  <slot>switchScreenMode()</slot>
+  <slot>closePrompt()</slot>
  </slots>
 </ui>
